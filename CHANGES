@@ -1,0 +1,13 @@
+Changes 0.0.1
+												10 Apr 2014
+	*) The first public version.
+	*) Feature: 实现了 PasswordEncoder 接口，支持 MD5、SHA、SHA-1、SHA-256、SHA-512 加密
+	*) Feature: 重新实现了 JdbcAuthenticationHandler，通过配置 JdbcTemplate Bean 实现数据查询
+	*) Feature: 增加了带验证码的 Credentials（com.buession.cas.authentication.principal.UsernamePasswordCaptchaCredentials）
+	*) Feature: 增加了记住用户名且带验证码的 Credentials（com.buession.cas.authentication.principal.RememberMeUsernamePasswordCaptchaCredentials）
+	*) Feature: 重新实现了 OAuthAuthenticationMetaDataPopulator，支持通过 OAuth 获得的用户资料和本地数据库中查询得到的用户信息进行合并
+	*) Feature: 实现了验证码控制器（CaptchaController）和验证码异步验证控制器（ValidateCaptchaController）
+	*) Feature: 实现了带验证码功能的用户登录验证 Action（AuthenticationCaptchaViaFormAction）
+	*) Feature: 重新实现了 OAuth 验证 Action（OAuthAction）
+	*) Feature: 实现了验证 OAuth 用户是否进行站内绑定 Action（OAuthBindCheckAction和OAuthBindJdbcCheckAction）
+	*) Feature: 实现了 OAuth 用户站内绑定 Action（OAuthBindAction）

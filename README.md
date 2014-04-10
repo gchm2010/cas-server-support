@@ -1,2 +1,2 @@
-cas-jdbctemplate-support
+cas-server-support
 ========================
