@@ -142,7 +142,9 @@ public abstract class OAuthSingleRowJdbcPersonAttributeDao extends SingleRowJdbc
 	}
 
 	protected class ProviderId {
+
 		private final String providerName;
+
 		private final String id;
 
 		public ProviderId(final String providerName, final String id) {
