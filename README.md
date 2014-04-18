@@ -11,7 +11,7 @@ CAS 版本 >= 3.5.2
 下载
 ============
 
-下载地址：https://github.com/eduosi/cas-server-support/archive/master.zip
+下载地址：https://github.com/eduosi/cas-server-support/releases/latest
 
 Maven
 
