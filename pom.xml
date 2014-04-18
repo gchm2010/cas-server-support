@@ -68,11 +68,6 @@
   			<artifactId>oauth-client</artifactId>
   			<version>0.0.1</version>
 		</dependency>
-        <dependency>
-  			<groupId>com.buession</groupId>
-  			<artifactId>openid-client</artifactId>
-  			<version>0.0.1</version>
-		</dependency>
 
 		<dependency>
   			<groupId>org.jasig.service.persondir</groupId>

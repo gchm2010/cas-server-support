@@ -3,10 +3,11 @@ cas-server-support
 
 CAS Server 扩展，重写了部分 CAS Server API，使其更灵活，更可高，更高效。
 
-
-版本说明
+系统需求
 ============
 CAS 版本 >= 3.5.2
+Buession Mcrypt 版本 >= 0.0.4
+Buession OAuth Client 版本 >= 0.0.1
 
 下载
 ============
