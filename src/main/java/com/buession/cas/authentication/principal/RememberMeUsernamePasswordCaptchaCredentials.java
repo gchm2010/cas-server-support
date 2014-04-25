@@ -26,9 +26,6 @@
  */
 package com.buession.cas.authentication.principal;
 
-import javax.validation.constraints.NotNull;
-import javax.validation.constraints.Size;
-
 import org.jasig.cas.authentication.principal.RememberMeUsernamePasswordCredentials;
 
 /**
@@ -44,8 +41,6 @@ public class RememberMeUsernamePasswordCaptchaCredentials extends
 	/**
 	 * 验证码
 	 */
-	@NotNull(message = "required.captcha")
-	@Size(min = 1, message = "required.captcha")
 	private String validateCode;
 
 	/**

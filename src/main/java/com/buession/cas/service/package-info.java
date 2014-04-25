@@ -24,17 +24,5 @@
  * | Copyright @ 2013-2014 Buession.com Inc.														|
  * +------------------------------------------------------------------------------------------------+
  */
-package com.buession.cas.web.utils;
 
-
-/**
- * 验证码验证工具
- * 
- * @author Yong.Teng <webmaster@buession.com>
- */
-public final class CaptchaValidate {
-
-	private CaptchaValidate() {
-	}
-
-}
+package com.buession.cas.service;

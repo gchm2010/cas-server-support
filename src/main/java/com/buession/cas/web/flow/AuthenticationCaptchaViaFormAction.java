@@ -26,9 +26,9 @@
  */
 package com.buession.cas.web.flow;
 
+import javax.annotation.Resource;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import javax.servlet.http.HttpSession;
 import javax.validation.constraints.NotNull;
 
 import org.jasig.cas.CentralAuthenticationService;
@@ -47,8 +47,7 @@ import org.springframework.webflow.execution.Event;
 import org.springframework.webflow.execution.RequestContext;
 
 import com.buession.cas.authentication.principal.RememberMeUsernamePasswordCaptchaCredentials;
-import com.buession.cas.web.utils.CaptchaValidate;
-import com.google.code.kaptcha.util.Config;
+import com.buession.cas.service.CaptchaService;
 
 /**
  * Action to authenticate credentials with and retrieve a TicketGrantingTicket for
@@ -78,10 +77,11 @@ public class AuthenticationCaptchaViaFormAction extends AbstractAction {
 	private CookieGenerator warnCookieGenerator;
 
 	/**
-	 * 验证码配置
+	 * 验证码 Service
 	 */
 	@NotNull
-	private Config captchaConfig;
+	@Resource
+	private CaptchaService captchaService;
 
 	/**
 	 * 返回凭证绑定器
@@ -141,24 +141,6 @@ public class AuthenticationCaptchaViaFormAction extends AbstractAction {
 	 */
 	public void setWarnCookieGenerator(CookieGenerator warnCookieGenerator) {
 		this.warnCookieGenerator = warnCookieGenerator;
-	}
-
-	/**
-	 * 返回验证码配置
-	 * 
-	 * @return 验证码配置
-	 */
-	public Config getCaptchaConfig() {
-		return captchaConfig;
-	}
-
-	/**
-	 * 设置验证码配置
-	 * 
-	 * @param captchaConfig
-	 */
-	public void setCaptchaConfig(Config captchaConfig) {
-		this.captchaConfig = captchaConfig;
 	}
 
 	/**
@@ -265,11 +247,11 @@ public class AuthenticationCaptchaViaFormAction extends AbstractAction {
 	 *        消息上下文
 	 * @return 验证码是否正确
 	 */
-	private boolean captchaValidate(final HttpServletRequest request,
+	protected boolean captchaValidate(final HttpServletRequest request,
 			final Credentials credentials, final MessageContext messageContext) {
 		final RememberMeUsernamePasswordCaptchaCredentials _credentials = (RememberMeUsernamePasswordCaptchaCredentials) credentials;
 		String validateCode = _credentials.getValidateCode();
-		boolean result = CaptchaValidate.validate(request, captchaConfig, validateCode);
+		boolean result = captchaService.validate(request, validateCode);
 
 		if (result == false) {
 			logger.warn("Invalid captcha " + validateCode);
@@ -278,8 +260,7 @@ public class AuthenticationCaptchaViaFormAction extends AbstractAction {
 					.defaultText(code).build());
 		}
 
-		HttpSession session = request.getSession();
-		session.removeAttribute(captchaConfig.getSessionKey());
+		captchaService.delete(request);
 
 		return result;
 	}

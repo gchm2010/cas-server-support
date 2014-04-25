@@ -1,3 +1,11 @@
+Changes 0.0.2
+
+	*) Feature: 增加验证码抽象类 CaptchaService
+	*) Feature: 增加验证码 Memcached 服务类 MemcachedCaptchaService
+	*) Feature: AuthenticationCaptchaViaFormAction 增加是否验证验证码开关
+	*) Change：验证码废弃 Session 存储
+	*) Change：允许 com.buession.cas.authentication.principal.UsernamePasswordCaptchaCredentials 和 com.buession.cas.authentication.principal.UsernamePasswordCaptchaCredentials.RememberMeUsernamePasswordCaptchaCredentials 属性 validateCode 为空
+
 Changes 0.0.1
 												10 Apr 2014
 	*) The first public version.

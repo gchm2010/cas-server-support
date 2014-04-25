@@ -24,77 +24,91 @@
  * | Copyright @ 2013-2014 Buession.com Inc.														|
  * +------------------------------------------------------------------------------------------------+
  */
-package com.buession.cas.authentication.principal;
+package com.buession.cas.service;
 
-import org.jasig.cas.authentication.principal.UsernamePasswordCredentials;
+import javax.validation.constraints.NotNull;
+
+import net.spy.memcached.MemcachedClient;
+
+import com.google.code.kaptcha.util.Config;
 
 /**
- * UsernamePasswordCredentials respresents the username and password and captcha that a user
- * may provide in order to prove the authenticity of who they say they are.
- * 
  * @author Yong.Teng <webmaster@buession.com>
  */
-public class UsernamePasswordCaptchaCredentials extends UsernamePasswordCredentials {
-
-	private static final long serialVersionUID = -2929361901593111856L;
+public class MemcachedCaptchaService extends CaptchaService {
 
 	/**
-	 * 验证码
+	 * Memcached Client
 	 */
-	private String validateCode;
+	@NotNull
+	private MemcachedClient memcachedClient;
 
 	/**
-	 * 返回验证码
-	 * 
-	 * @return 验证码
+	 * 验证码缓存时长
 	 */
-	public String getValidateCode() {
-		return validateCode;
+	private int lifetime = 3;
+
+	/**
+	 * @param config
+	 *        验证码配置
+	 */
+	public MemcachedCaptchaService(final Config config) {
+		super(config);
 	}
 
 	/**
-	 * 设置验证码
+	 * 获取 Memcached Client
 	 * 
-	 * @param validateCode
-	 *        验证码
+	 * @return Memcached Client
 	 */
-	public void setValidateCode(String validateCode) {
-		this.validateCode = validateCode;
+	public MemcachedClient getMemcachedClient() {
+		return memcachedClient;
+	}
+
+	/**
+	 * 设置 Memcached Client
+	 * 
+	 * @param memcachedClient
+	 *        Memcached Client
+	 */
+	public void setMemcachedClient(MemcachedClient memcachedClient) {
+		this.memcachedClient = memcachedClient;
+	}
+
+	/**
+	 * 获取验证码缓存时长
+	 * 
+	 * @return Memcached Client
+	 */
+	public int getLifetime() {
+		return lifetime;
+	}
+
+	/**
+	 * 设置验证码缓存时长
+	 * 
+	 * @param lifetime
+	 *        验证码缓存时长
+	 */
+	public void setLifetime(int lifetime) {
+		this.lifetime = lifetime;
 	}
 
 	@Override
-	public int hashCode() {
-		int result = super.hashCode();
-		result = 31 * result + (validateCode != null ? validateCode.hashCode() : 0);
-
-		return result;
+	protected void add(String key, String value) {
+		memcachedClient.set(key, lifetime, value);
 	}
 
 	@Override
-	public boolean equals(Object object) {
-		if (this == object) {
-			return true;
-		}
+	protected boolean validate(String key, String value) {
+		Object cacheValue = memcachedClient.get(key);
+		System.out.println(value + ", " + cacheValue);
+		return cacheValue != null && value != null && value.equalsIgnoreCase(cacheValue.toString());
+	}
 
-		if (object == null || getClass() != object.getClass()) {
-			return false;
-		}
-
-		UsernamePasswordCaptchaCredentials that = (UsernamePasswordCaptchaCredentials) object;
-		String username = getUsername();
-		String password = getPassword();
-		String that_username = that.getUsername();
-		String that_password = that.getPassword();
-
-		if (password != null ? !password.equals(that_password) : that_password != null) {
-			return false;
-		}
-
-		if (username != null ? !username.equals(that_username) : that_username != null) {
-			return false;
-		}
-
-		return that.getValidateCode().equals(validateCode);
+	@Override
+	protected void delete(String key) {
+		memcachedClient.delete(key);
 	}
 
 }

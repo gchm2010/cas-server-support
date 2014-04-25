@@ -39,9 +39,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.servlet.mvc.AbstractController;
 
-import com.buession.cas.web.utils.CaptchaValidate;
-import com.google.code.kaptcha.Producer;
-import com.google.code.kaptcha.util.Config;
+import com.buession.cas.service.CaptchaService;
 
 /**
  * 验证码异步验证控制器
@@ -52,18 +50,11 @@ import com.google.code.kaptcha.util.Config;
 public class ValidateCaptchaController extends AbstractController {
 
 	/**
-	 * 验证配置
+	 * 验证码 Service
 	 */
 	@NotNull
 	@Resource
-	private Config config;
-
-	/**
-	 * 验证码生成提供者
-	 */
-	@NotNull
-	@Resource
-	private Producer captchaProducer;
+	private CaptchaService captchaService;
 
 	/**
 	 * 传输验证码的请求参数
@@ -76,40 +67,22 @@ public class ValidateCaptchaController extends AbstractController {
 	}
 
 	/**
-	 * 返回验证码配置
+	 * 返回验证码 Service
 	 * 
-	 * @return 验证码配置
+	 * @return 验证码 Service
 	 */
-	public Config getConfig() {
-		return config;
+	public CaptchaService getCaptchaService() {
+		return captchaService;
 	}
 
 	/**
-	 * 设置验证码配置
+	 * 设置验证码 Service
 	 * 
-	 * @param config
-	 *        验证码配置
+	 * @param captchaService
+	 *        验证码 Service
 	 */
-	public void setConfig(Config config) {
-		this.config = config;
-	}
-
-	/**
-	 * 返回验证码生成提供者
-	 * 
-	 * @return 验证码生成提供者
-	 */
-	public Producer getCaptchaProducer() {
-		return captchaProducer;
-	}
-
-	/**
-	 * 设置验证码生成提供者
-	 * 
-	 * @param captchaProducer
-	 */
-	public void setCaptchaProducer(Producer captchaProducer) {
-		this.captchaProducer = captchaProducer;
+	public void setCaptchaService(CaptchaService captchaService) {
+		this.captchaService = captchaService;
 	}
 
 	/**
@@ -150,18 +123,12 @@ public class ValidateCaptchaController extends AbstractController {
 		return null;
 	}
 
-	/*
-	 * (non-Javadoc)
-	 * @see
-	 * org.springframework.web.servlet.mvc.AbstractController#handleRequestInternal(javax.servlet
-	 * .http.HttpServletRequest, javax.servlet.http.HttpServletResponse)
-	 */
 	@Override
 	protected ModelAndView handleRequestInternal(HttpServletRequest request,
 			HttpServletResponse response) throws Exception {
 		PrintWriter writer = response.getWriter();
 
-		writer.write(CaptchaValidate.validate(request, requestParamName, config) == true ? "true"
+		writer.write(captchaService.validate(request, request.getParameter(requestParamName)) == true ? "true"
 				: "false");
 		writer.close();
 

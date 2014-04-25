@@ -25,9 +25,4 @@
  * +------------------------------------------------------------------------------------------------+
  */
 
-/**
- *
- * Annotation support for cas server support principal.
- *
- */
 package com.buession.cas.authentication.principal;

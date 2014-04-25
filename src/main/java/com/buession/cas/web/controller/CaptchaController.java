@@ -34,7 +34,6 @@ import javax.imageio.ImageIO;
 import javax.servlet.ServletOutputStream;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import javax.servlet.http.HttpSession;
 import javax.validation.constraints.NotNull;
 
 import org.springframework.stereotype.Controller;
@@ -42,8 +41,8 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.servlet.mvc.AbstractController;
 
+import com.buession.cas.service.CaptchaService;
 import com.google.code.kaptcha.Producer;
-import com.google.code.kaptcha.util.Config;
 
 /**
  * 验证码控制器
@@ -54,40 +53,21 @@ import com.google.code.kaptcha.util.Config;
 public class CaptchaController extends AbstractController {
 
 	/**
-	 * 验证码配置
-	 */
-	@NotNull
-	@Resource
-	private Config config;
-
-	/**
 	 * 验证码生成提供者
 	 */
 	@NotNull
 	@Resource
 	private Producer producer;
 
+	/**
+	 * 验证码 Service
+	 */
+	@NotNull
+	@Resource
+	private CaptchaService captchaService;
+
 	public CaptchaController() {
 		setCacheSeconds(0);
-	}
-
-	/**
-	 * 返回验证码配置
-	 * 
-	 * @return 验证码配置
-	 */
-	public Config getConfig() {
-		return config;
-	}
-
-	/**
-	 * 设置验证码配置
-	 * 
-	 * @param config
-	 *        验证码配置
-	 */
-	public void setConfig(Config config) {
-		this.config = config;
 	}
 
 	/**
@@ -103,9 +83,29 @@ public class CaptchaController extends AbstractController {
 	 * 设置验证码生成提供者
 	 * 
 	 * @param captchaProducer
+	 *        验证码生成提供者
 	 */
 	public void setProducer(Producer producer) {
 		this.producer = producer;
+	}
+
+	/**
+	 * 返回验证码 Service
+	 * 
+	 * @return 验证码 Service
+	 */
+	public CaptchaService getCaptchaService() {
+		return captchaService;
+	}
+
+	/**
+	 * 设置验证码 Service
+	 * 
+	 * @param captchaService
+	 *        验证码 Service
+	 */
+	public void setCaptchaService(CaptchaService captchaService) {
+		this.captchaService = captchaService;
 	}
 
 	/**
@@ -134,9 +134,7 @@ public class CaptchaController extends AbstractController {
 		response.setDateHeader("Expires", 0);
 
 		String text = producer.createText();
-
-		HttpSession session = request.getSession();
-		session.setAttribute(config.getSessionKey(), text);
+		captchaService.add(request, text);
 
 		BufferedImage im = producer.createImage(text);
 		ServletOutputStream out = response.getOutputStream();
@@ -150,4 +148,5 @@ public class CaptchaController extends AbstractController {
 
 		return null;
 	}
+
 }
